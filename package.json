@@ -1,0 +1,16 @@
+{
+  "name": "node-file-manager",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tatyana404/node-file-manager.git"
+  },
+  "keywords": ["nodejs", "tatyana404"],
+  "author": "tatyana404",
+  "license": "ISC"
+}
