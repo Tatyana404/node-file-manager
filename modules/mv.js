@@ -3,6 +3,7 @@ import { join, isAbsolute, normalize } from 'path'
 import { access, unlink } from 'fs/promises'
 import { fileURLToPath } from 'url'
 import { cwd } from 'process'
+import { operationFailed } from './index.js'
 const { F_OK } = constants
 
 export const moveFile = async input => {
@@ -22,7 +23,7 @@ export const moveFile = async input => {
         )
         await unlink(join(fileURLToPath('file://'), filePathForMove))
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     } else {
       try {
@@ -38,7 +39,7 @@ export const moveFile = async input => {
         )
         await unlink(join(fileURLToPath('file://'), filePathForMove))
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     }
   } else {
@@ -54,7 +55,7 @@ export const moveFile = async input => {
           join(fileURLToPath(`file://${cwd()}`), `/${filePathForMove}`)
         )
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     } else {
       try {
@@ -72,7 +73,7 @@ export const moveFile = async input => {
           join(fileURLToPath(`file://${cwd()}`), `/${filePathForMove}`)
         )
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     }
   }

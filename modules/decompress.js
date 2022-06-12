@@ -5,6 +5,7 @@ import { access } from 'fs/promises'
 import { pipeline } from 'stream'
 import { promisify } from 'util'
 import { cwd } from 'process'
+import { operationFailed } from './index.js'
 const { F_OK } = constants
 
 export const decompressFile = async input => {
@@ -19,7 +20,7 @@ export const decompressFile = async input => {
   if (isAbsolute(filePathForDecompress)) {
     if (isAbsolute(directoryPathForFileForDecompress)) {
       if (!fileNameForDecompress.endsWith('.br')) {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       } else {
         try {
           await access(filePathForDecompress, F_OK)
@@ -35,12 +36,12 @@ export const decompressFile = async input => {
 
           await pipeForDecompress(inp, BrotliDecompress, out)
         } catch {
-          console.error(`Operation failed\nYou are currently in ${cwd()}`)
+          operationFailed()
         }
       }
     } else {
       if (!fileNameForDecompress.endsWith('.br')) {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       } else {
         try {
           await access(filePathForDecompress, F_OK)
@@ -61,14 +62,14 @@ export const decompressFile = async input => {
 
           await pipeForDecompress(inp, BrotliDecompress, out)
         } catch {
-          console.error(`Operation failed\nYou are currently in ${cwd()}`)
+          operationFailed()
         }
       }
     }
   } else {
     if (isAbsolute(directoryPathForFileForDecompress)) {
       if (!fileNameForDecompress.endsWith('.br')) {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       } else {
         try {
           await access(normalize(`${cwd()}/${filePathForDecompress}`), F_OK)
@@ -84,12 +85,12 @@ export const decompressFile = async input => {
 
           await pipeForDecompress(inp, BrotliDecompress, out)
         } catch {
-          console.error(`Operation failed\nYou are currently in ${cwd()}`)
+          operationFailed()
         }
       }
     } else {
       if (!fileNameForDecompress.endsWith('.br')) {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       } else {
         try {
           await access(normalize(`${cwd()}/${filePathForDecompress}`), F_OK)
@@ -110,7 +111,7 @@ export const decompressFile = async input => {
 
           await pipeForDecompress(inp, BrotliDecompress, out)
         } catch {
-          console.error(`Operation failed\nYou are currently in ${cwd()}`)
+          operationFailed()
         }
       }
     }

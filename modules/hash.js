@@ -3,6 +3,7 @@ const { createHash } = await import('crypto')
 import { isAbsolute, normalize } from 'path'
 import { access } from 'fs/promises'
 import { cwd } from 'process'
+import { operationFailed } from './index.js'
 const { F_OK, R_OK } = constants
 
 export const calculateHashForFile = async input => {
@@ -13,7 +14,7 @@ export const calculateHashForFile = async input => {
   filePathForHash = filePathForHash.join(' ')
 
   if (!filePathForHash.startsWith('.') && !filePathForHash.startsWith('/')) {
-    return console.error(`Operation failed\nYou are currently in ${cwd()}`)
+    return operationFailed()
   }
 
   if (isAbsolute(filePathForHash)) {
@@ -26,8 +27,9 @@ export const calculateHashForFile = async input => {
         hash.update(chunk.toString().trim())
         console.log(hash.digest('hex'))
       })
+      data.on('error', () => operationFailed())
     } catch {
-      console.error(`Operation failed\nYou are currently in ${cwd()}`)
+      operationFailed()
     }
   } else {
     try {
@@ -39,8 +41,9 @@ export const calculateHashForFile = async input => {
         hash.update(chunk.toString().trim())
         console.log(hash.digest('hex'))
       })
+      data.on('error', () => operationFailed())
     } catch {
-      console.error(`Operation failed\nYou are currently in ${cwd()}`)
+      operationFailed()
     }
   }
 }

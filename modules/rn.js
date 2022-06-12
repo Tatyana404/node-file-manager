@@ -3,6 +3,7 @@ import { access, rename } from 'fs/promises'
 import { fileURLToPath } from 'url'
 import { constants } from 'fs'
 import { cwd } from 'process'
+import { operationFailed } from './index.js'
 const { F_OK } = constants
 
 export const renameFile = async input => {
@@ -24,7 +25,7 @@ export const renameFile = async input => {
         )
       )
     } catch {
-      console.error(`Operation failed\nYou are currently in ${cwd()}`)
+      operationFailed()
     }
   } else {
     try {
@@ -34,7 +35,7 @@ export const renameFile = async input => {
         join(fileURLToPath(`file://${cwd()}`), `/${newFileNameForRename}`)
       )
     } catch {
-      console.error(`Operation failed\nYou are currently in ${cwd()}`)
+      operationFailed()
     }
   }
 }

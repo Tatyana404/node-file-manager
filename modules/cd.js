@@ -1,4 +1,5 @@
 import { chdir, cwd } from 'process'
+import { operationFailed } from './index.js'
 
 export const goTo = input => {
   let pathToDirectory = input.split(' ')
@@ -9,6 +10,6 @@ export const goTo = input => {
     chdir(pathToDirectory)
     console.log(`You are currently in ${cwd()}`)
   } catch (err) {
-    console.error(`Operation failed\nYou are currently in ${cwd()}`)
+    operationFailed()
   }
 }

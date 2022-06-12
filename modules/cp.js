@@ -2,6 +2,7 @@ import { createReadStream, createWriteStream, constants } from 'fs'
 import { isAbsolute, normalize } from 'path'
 import { access } from 'fs/promises'
 import { cwd } from 'process'
+import { operationFailed } from './index.js'
 const { F_OK } = constants
 
 export const copyFile = async input => {
@@ -20,7 +21,7 @@ export const copyFile = async input => {
           createWriteStream(`${directoryPathForFileForCopy}/${fileNameForCopy}`)
         )
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     } else {
       try {
@@ -35,7 +36,7 @@ export const copyFile = async input => {
           )
         )
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     }
   } else {
@@ -48,7 +49,7 @@ export const copyFile = async input => {
           createWriteStream(`${directoryPathForFileForCopy}/${fileNameForCopy}`)
         )
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     } else {
       try {
@@ -63,7 +64,7 @@ export const copyFile = async input => {
           )
         )
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     }
   }

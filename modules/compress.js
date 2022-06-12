@@ -5,6 +5,7 @@ import { access } from 'fs/promises'
 import { pipeline } from 'stream'
 import { promisify } from 'util'
 import { cwd } from 'process'
+import { operationFailed } from './index.js'
 const { F_OK } = constants
 
 export const compressFile = async input => {
@@ -28,7 +29,7 @@ export const compressFile = async input => {
 
         await pipeForCompress(inp, BrotliCompress, out)
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     } else {
       try {
@@ -47,7 +48,7 @@ export const compressFile = async input => {
 
         await pipeForCompress(inp, BrotliCompress, out)
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     }
   } else {
@@ -63,7 +64,7 @@ export const compressFile = async input => {
 
         await pipeForCompress(inp, BrotliCompress, out)
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     } else {
       try {
@@ -82,7 +83,7 @@ export const compressFile = async input => {
 
         await pipeForCompress(inp, BrotliCompress, out)
       } catch {
-        console.error(`Operation failed\nYou are currently in ${cwd()}`)
+        operationFailed()
       }
     }
   }
