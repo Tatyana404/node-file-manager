@@ -1,9 +1,8 @@
 import { EOL, cpus, homedir, userInfo, arch } from 'os'
-import { cwd } from 'process'
 
 export const operatingSystemInfo = input => {
   const [command] = input.split(' ').slice(-1)
-  
+
   switch (command) {
     case '--EOL':
       console.log(JSON.stringify(EOL))
@@ -15,7 +14,7 @@ export const operatingSystemInfo = input => {
       for (const { model, speed } of cpus()) {
         cpusResult.push({
           model,
-          speed: Math.trunc(speed / 1000)
+          speed: `${(speed / 1000).toFixed(1)} GHz`
         })
       }
 
@@ -35,6 +34,6 @@ export const operatingSystemInfo = input => {
 
       break
     default:
-      return console.error(`Operation failed\nYou are currently in ${cwd()}`)
+      return console.error('Invalid input')
   }
 }
