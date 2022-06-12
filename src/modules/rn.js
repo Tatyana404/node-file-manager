@@ -4,36 +4,28 @@ import { fileURLToPath } from 'url'
 import { constants } from 'fs'
 import { cwd } from 'process'
 import { operationFailed } from './index.js'
-const { F_OK } = constants
+const { F_OK, R_OK } = constants
 
 export const renameFile = async input => {
-  const [filePathForRename, newFileNameForRename] = input.split(' ').slice(-2)
-  const [oldFileNameForRename] = filePathForRename.split('/').slice(-1)
+  const prepare = input.split(' ')
+  prepare.shift()
+  const newFileNameForRename = prepare.pop()
+  const filePathForRename = prepare.join(' ')
+  const pathForRename = filePathForRename.split('/')
+  pathForRename.pop()
+  const basePathForRename = pathForRename.join('/')
 
   if (isAbsolute(filePathForRename)) {
     try {
-      await access(filePathForRename, F_OK)
-
-      const path = filePathForRename.split('/')
-      path.pop()
-
-      await rename(
-        join(fileURLToPath(`file://${filePathForRename}`)),
-        join(
-          fileURLToPath(`file://${path.join('/')}`),
-          `/${newFileNameForRename}`
-        )
-      )
+      await access(filePathForRename, F_OK | R_OK)
+      await rename(join(fileURLToPath(`file://${filePathForRename}`)),join(fileURLToPath(`file://${basePathForRename}/`),newFileNameForRename))
     } catch {
       operationFailed()
     }
   } else {
     try {
-      await access(normalize(`${cwd()}/${filePathForRename}`), F_OK)
-      await rename(
-        join(fileURLToPath(`file://${cwd()}`), `/${oldFileNameForRename}`),
-        join(fileURLToPath(`file://${cwd()}`), `/${newFileNameForRename}`)
-      )
+      await access(normalize(`${cwd()}/${filePathForRename}`), F_OK | R_OK)
+      await rename(join(fileURLToPath(`file://${cwd()}/`), filePathForRename),join(fileURLToPath(`file://${cwd()}/`),`${basePathForRename}/${newFileNameForRename}`))
     } catch {
       operationFailed()
     }
