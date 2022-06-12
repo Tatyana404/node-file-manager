@@ -1,23 +1,7 @@
 import { createInterface } from 'readline'
 import { chdir } from 'process'
 import { homedir } from 'os'
-
-import { getListAllFilesAndFolders } from './modules/ls.js'
-import { welcomeFileManager } from './modules/welcome.js'
-import { calculateHashForFile } from './modules/hash.js'
-import { decompressFile } from './modules/decompress.js'
-import { operatingSystemInfo } from './modules/os.js'
-import { startFileManager } from './modules/start.js'
-import { compressFile } from './modules/compress.js'
-import { exitFileManager } from './modules/exit.js'
-import { createEmptyFile } from './modules/add.js'
-import { renameFile } from './modules/rn.js'
-import { deleteFile } from './modules/rm.js'
-import { readFile } from './modules/cat.js'
-import { moveFile } from './modules/mv.js'
-import { copyFile } from './modules/cp.js'
-import { goUpper } from './modules/up.js'
-import { goTo } from './modules/cd.js'
+import * as _ from './modules/index.js'
 
 const [argv] = process.argv.slice(2)
 chdir(homedir()) //or process.env.HOME || process.env.USERPROFILE
@@ -29,14 +13,14 @@ chdir(homedir()) //or process.env.HOME || process.env.USERPROFILE
   })
 
   if (!argv || !argv.startsWith('--username=')) {
-    startFileManager()
+    _.startFileManager()
     userInterface.close()
   } else {
     const userName = argv.split('=').splice(-1)
-    welcomeFileManager(userName)
+    _.welcomeFileManager(userName)
 
     userInterface.on('SIGINT', () => {
-      exitFileManager(userName)
+      _.exitFileManager(userName)
       userInterface.close()
     })
 
@@ -44,60 +28,60 @@ chdir(homedir()) //or process.env.HOME || process.env.USERPROFILE
       if (input.length) {
         switch (input.split(' ')[0]) {
           case '.exit':
-            exitFileManager(userName)
+            _.exitFileManager(userName)
             userInterface.close()
 
             break
           case 'up':
-            goUpper()
+            _.goUpper()
 
             break
           case 'cd':
-            goTo(input)
+            _.goTo(input)
 
             break
           case 'ls':
-            await getListAllFilesAndFolders()
+            await _.getListAllFilesAndFolders()
 
             break
           case 'cat':
-            await readFile(input)
+            await _.readFile(input)
 
             break
           case 'add':
-            createEmptyFile(input)
+            _.createEmptyFile(input)
 
             break
           case 'rn':
-            await renameFile(input)
+            await _.renameFile(input)
 
             break
           case 'cp':
-            await copyFile(input)
+            await _.copyFile(input)
 
             break
           case 'mv':
-            await moveFile(input)
+            await _.moveFile(input)
 
             break
           case 'rm':
-            await deleteFile(input)
+            await _.deleteFile(input)
 
             break
           case 'os':
-            operatingSystemInfo(input)
+            _.operatingSystemInfo(input)
 
             break
           case 'hash':
-            await calculateHashForFile(input)
+            await _.calculateHashForFile(input)
 
             break
           case 'compress':
-            await compressFile(input)
+            await _.compressFile(input)
 
             break
           case 'decompress':
-            await decompressFile(input)
+            await _.decompressFile(input)
 
             break
           default:
