@@ -26,7 +26,8 @@ export const compressFile = async input => {
         const out = createWriteStream(
           `${directoryPathForFileForCompress}/${fileNameForCompress}.br`
         )
-
+        inp.on('error', () => operationFailed())
+        out.on('error', () => operationFailed())
         await pipeForCompress(inp, BrotliCompress, out)
       } catch {
         operationFailed()
@@ -45,7 +46,8 @@ export const compressFile = async input => {
             `${cwd()}/${directoryPathForFileForCompress}/${fileNameForCompress}.br`
           )
         )
-
+        inp.on('error', () => operationFailed())
+        out.on('error', () => operationFailed())
         await pipeForCompress(inp, BrotliCompress, out)
       } catch {
         operationFailed()
@@ -62,6 +64,7 @@ export const compressFile = async input => {
           `${directoryPathForFileForCompress}/${fileNameForCompress}.br`
         )
 
+        out.on('error', () => operationFailed())
         await pipeForCompress(inp, BrotliCompress, out)
       } catch {
         operationFailed()
@@ -81,6 +84,7 @@ export const compressFile = async input => {
           )
         )
 
+        out.on('error', () => operationFailed())
         await pipeForCompress(inp, BrotliCompress, out)
       } catch {
         operationFailed()

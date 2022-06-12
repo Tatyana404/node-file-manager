@@ -17,9 +17,10 @@ export const copyFile = async input => {
         await access(filePathForCopy, F_OK)
         await access(directoryPathForFileForCopy, F_OK)
 
-        createReadStream(filePathForCopy).pipe(
+        const result = createReadStream(filePathForCopy).pipe(
           createWriteStream(`${directoryPathForFileForCopy}/${fileNameForCopy}`)
         )
+        result.on('error', () => operationFailed())
       } catch {
         operationFailed()
       }
@@ -28,13 +29,14 @@ export const copyFile = async input => {
         await access(filePathForCopy, F_OK)
         await access(normalize(`${cwd()}/${directoryPathForFileForCopy}`), F_OK)
 
-        createReadStream(filePathForCopy).pipe(
+        const result = createReadStream(filePathForCopy).pipe(
           createWriteStream(
             normalize(
               `${cwd()}/${directoryPathForFileForCopy}/${fileNameForCopy}`
             )
           )
         )
+        result.on('error', () => operationFailed())
       } catch {
         operationFailed()
       }
@@ -45,9 +47,10 @@ export const copyFile = async input => {
         await access(normalize(`${cwd()}/${filePathForCopy}`), F_OK)
         await access(directoryPathForFileForCopy, F_OK)
 
-        createReadStream(normalize(`${cwd()}/${filePathForCopy}`)).pipe(
+        const result = createReadStream(normalize(`${cwd()}/${filePathForCopy}`)).pipe(
           createWriteStream(`${directoryPathForFileForCopy}/${fileNameForCopy}`)
         )
+        result.on('error', () => operationFailed())
       } catch {
         operationFailed()
       }
@@ -56,13 +59,14 @@ export const copyFile = async input => {
         await access(normalize(`${cwd()}/${filePathForCopy}`), F_OK)
         await access(normalize(`${cwd()}/${directoryPathForFileForCopy}`), F_OK)
 
-        createReadStream(normalize(`${cwd()}/${filePathForCopy}`)).pipe(
+        const result = createReadStream(normalize(`${cwd()}/${filePathForCopy}`)).pipe(
           createWriteStream(
             normalize(
               `${cwd()}/${directoryPathForFileForCopy}/${fileNameForCopy}`
             )
           )
         )
+        result.on('error', () => operationFailed())
       } catch {
         operationFailed()
       }

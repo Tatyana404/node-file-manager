@@ -18,9 +18,10 @@ export const moveFile = async input => {
         await access(filePathForMove, F_OK)
         await access(directoryPathForFileForMove, F_OK)
 
-        createReadStream(filePathForMove).pipe(
+        const result = createReadStream(filePathForMove).pipe(
           createWriteStream(`${directoryPathForFileForMove}/${fileNameForMove}`)
         )
+        result.on('error', () => operationFailed())
         await unlink(join(fileURLToPath('file://'), filePathForMove))
       } catch {
         operationFailed()
@@ -30,13 +31,14 @@ export const moveFile = async input => {
         await access(filePathForMove, F_OK)
         await access(normalize(`${cwd()}/${directoryPathForFileForMove}`), F_OK)
 
-        createReadStream(filePathForMove).pipe(
+        const result = createReadStream(filePathForMove).pipe(
           createWriteStream(
             normalize(
               `${cwd()}/${directoryPathForFileForMove}/${fileNameForMove}`
             )
           )
         )
+        result.on('error', () => operationFailed())
         await unlink(join(fileURLToPath('file://'), filePathForMove))
       } catch {
         operationFailed()
@@ -48,9 +50,10 @@ export const moveFile = async input => {
         await access(normalize(`${cwd()}/${filePathForMove}`), F_OK)
         await access(directoryPathForFileForMove, F_OK)
 
-        createReadStream(normalize(`${cwd()}/${filePathForMove}`)).pipe(
+        const result = createReadStream(normalize(`${cwd()}/${filePathForMove}`)).pipe(
           createWriteStream(`${directoryPathForFileForMove}/${fileNameForMove}`)
         )
+        result.on('error', () => operationFailed())
         await unlink(
           join(fileURLToPath(`file://${cwd()}`), `/${filePathForMove}`)
         )
@@ -62,13 +65,14 @@ export const moveFile = async input => {
         await access(normalize(`${cwd()}/${filePathForMove}`), F_OK)
         await access(normalize(`${cwd()}/${directoryPathForFileForMove}`), F_OK)
 
-        createReadStream(normalize(`${cwd()}/${filePathForMove}`)).pipe(
+        const result = createReadStream(normalize(`${cwd()}/${filePathForMove}`)).pipe(
           createWriteStream(
             normalize(
               `${cwd()}/${directoryPathForFileForMove}/${fileNameForMove}`
             )
           )
         )
+        result.on('error', () => operationFailed())
         await unlink(
           join(fileURLToPath(`file://${cwd()}`), `/${filePathForMove}`)
         )

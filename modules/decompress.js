@@ -33,7 +33,8 @@ export const decompressFile = async input => {
               -3
             )}`
           )
-
+          inp.on('error', () => operationFailed())
+          out.on('error', () => operationFailed())
           await pipeForDecompress(inp, BrotliDecompress, out)
         } catch {
           operationFailed()
@@ -59,7 +60,8 @@ export const decompressFile = async input => {
               )}`
             )
           )
-
+          inp.on('error', () => operationFailed())
+          out.on('error', () => operationFailed())
           await pipeForDecompress(inp, BrotliDecompress, out)
         } catch {
           operationFailed()
@@ -83,6 +85,7 @@ export const decompressFile = async input => {
             )}`
           )
 
+          out.on('error', () => operationFailed())
           await pipeForDecompress(inp, BrotliDecompress, out)
         } catch {
           operationFailed()
@@ -109,6 +112,7 @@ export const decompressFile = async input => {
             )
           )
 
+          out.on('error', () => operationFailed())
           await pipeForDecompress(inp, BrotliDecompress, out)
         } catch {
           operationFailed()
