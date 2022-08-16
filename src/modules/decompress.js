@@ -6,13 +6,10 @@ import { pipeline } from 'stream'
 import { promisify } from 'util'
 import { cwd } from 'process'
 import { operationFailed } from './index.js'
-const { F_OK } = constants
+const { F_OK, R_OK } = constants
 
 export const decompressFile = async input => {
-  const [
-    filePathForDecompress,
-    directoryPathForFileForDecompress
-  ] = input.split(' ').slice(-2)
+  const [filePathForDecompress, directoryPathForFileForDecompress] = input.split(' ').slice(-2)
   const [fileNameForDecompress] = filePathForDecompress.split('/').slice(-1)
   const BrotliDecompress = createBrotliDecompress()
   const pipeForDecompress = promisify(pipeline)
@@ -23,16 +20,12 @@ export const decompressFile = async input => {
         operationFailed()
       } else {
         try {
-          await access(filePathForDecompress, F_OK)
+          await access(filePathForDecompress, F_OK | R_OK)
           await access(directoryPathForFileForDecompress, F_OK)
 
           const inp = createReadStream(filePathForDecompress)
-          const out = createWriteStream(
-            `${directoryPathForFileForDecompress}/${fileNameForDecompress.slice(
-              0,
-              -3
-            )}`
-          )
+          const out = createWriteStream(`${directoryPathForFileForDecompress}/${fileNameForDecompress.slice(0, -3)}`)
+
           inp.on('error', () => operationFailed())
           out.on('error', () => operationFailed())
           await pipeForDecompress(inp, BrotliDecompress, out)
@@ -45,21 +38,12 @@ export const decompressFile = async input => {
         operationFailed()
       } else {
         try {
-          await access(filePathForDecompress, F_OK)
-          await access(
-            normalize(`${cwd()}/${directoryPathForFileForDecompress}`),
-            F_OK
-          )
+          await access(filePathForDecompress, F_OK | R_OK)
+          await access(normalize(`${cwd()}/${directoryPathForFileForDecompress}`),F_OK)
 
           const inp = createReadStream(filePathForDecompress)
-          const out = createWriteStream(
-            normalize(
-              `${cwd()}/${directoryPathForFileForDecompress}/${fileNameForDecompress.slice(
-                0,
-                -3
-              )}`
-            )
-          )
+          const out = createWriteStream(normalize(`${cwd()}/${directoryPathForFileForDecompress}/${fileNameForDecompress.slice(0, -3)}`))
+
           inp.on('error', () => operationFailed())
           out.on('error', () => operationFailed())
           await pipeForDecompress(inp, BrotliDecompress, out)
@@ -74,16 +58,11 @@ export const decompressFile = async input => {
         operationFailed()
       } else {
         try {
-          await access(normalize(`${cwd()}/${filePathForDecompress}`), F_OK)
+          await access(normalize(`${cwd()}/${filePathForDecompress}`), F_OK | R_OK)
           await access(directoryPathForFileForDecompress, F_OK)
 
           const inp = normalize(`${cwd()}/${filePathForDecompress}`)
-          const out = createWriteStream(
-            `${directoryPathForFileForDecompress}/${fileNameForDecompress.slice(
-              0,
-              -3
-            )}`
-          )
+          const out = createWriteStream(`${directoryPathForFileForDecompress}/${fileNameForDecompress.slice(0, -3)}`)
 
           out.on('error', () => operationFailed())
           await pipeForDecompress(inp, BrotliDecompress, out)
@@ -96,21 +75,11 @@ export const decompressFile = async input => {
         operationFailed()
       } else {
         try {
-          await access(normalize(`${cwd()}/${filePathForDecompress}`), F_OK)
-          await access(
-            normalize(`${cwd()}/${directoryPathForFileForDecompress}`),
-            F_OK
-          )
+          await access(normalize(`${cwd()}/${filePathForDecompress}`), F_OK | R_OK)
+          await access(normalize(`${cwd()}/${directoryPathForFileForDecompress}`),F_OK)
 
           const inp = normalize(`${cwd()}/${filePathForDecompress}`)
-          const out = createWriteStream(
-            normalize(
-              `${cwd()}/${directoryPathForFileForDecompress}/${fileNameForDecompress.slice(
-                0,
-                -3
-              )}`
-            )
-          )
+          const out = createWriteStream(normalize(`${cwd()}/${directoryPathForFileForDecompress}/${fileNameForDecompress.slice(0, -3)}`))
 
           out.on('error', () => operationFailed())
           await pipeForDecompress(inp, BrotliDecompress, out)

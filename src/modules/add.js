@@ -11,5 +11,6 @@ export const createEmptyFile = input => {
   }
 
   const result = createWriteStream(newFileNameForCreate)
+  
   result.on('error', () => operationFailed())
 }
