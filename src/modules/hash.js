@@ -22,9 +22,11 @@ export const calculateHashForFile = async input => {
       await access(filePathForHash, F_OK | R_OK)
 
       const data = createReadStream(filePathForHash)
+      let hashData = ''
 
-      data.on('data', chunk => {
-        hash.update(chunk.toString().trim())
+      data.on('data', chunk => hashData += chunk )
+      data.on('end', () => {
+        hash.update(hashData.toString().trim())
         console.log(hash.digest('hex'))
       })
       data.on('error', () => operationFailed())
@@ -36,9 +38,11 @@ export const calculateHashForFile = async input => {
       await access(normalize(`${cwd()}/${filePathForHash}`), F_OK | R_OK)
 
       const data = createReadStream(normalize(`${cwd()}/${filePathForHash}`))
+      let hashData = ''
 
-      data.on('data', chunk => {
-        hash.update(chunk.toString().trim())
+      data.on('data', chunk => hashData += chunk )
+      data.on('end', () => {
+        hash.update(hashData.toString().trim())
         console.log(hash.digest('hex'))
       })
       data.on('error', () => operationFailed())

@@ -19,8 +19,10 @@ export const readFile = async input => {
       await access(filePathForRead, F_OK | R_OK)
 
       const data = createReadStream(filePathForRead)
+      let fileData = ''
 
-      data.on('data', chunk => console.log(chunk.toString().trim()))
+      data.on('data', chunk => fileData += chunk )
+      data.on('end', () => console.log(fileData.toString().trim()))
       data.on('error', () => operationFailed())
     } catch {
       operationFailed()
@@ -30,8 +32,10 @@ export const readFile = async input => {
       await access(normalize(`${cwd()}/${filePathForRead}`), F_OK | R_OK)
 
       const data = createReadStream(normalize(`${cwd()}/${filePathForRead}`))
+      let fileData = ''
 
-      data.on('data', chunk => console.log(chunk.toString().trim()))
+      data.on('data', chunk => fileData += chunk )
+      data.on('end', () => console.log(fileData.toString().trim()))
       data.on('error', () => operationFailed())
     } catch {
       operationFailed()
